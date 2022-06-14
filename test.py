@@ -162,4 +162,28 @@ test_0 = test.drop(y_name,axis =1).iloc[:10]
 test_0.to_csv('test.csv')
 
 
+data = test_data[0:0]
+
+# 測試用
+
+for place_id in place_df["place_id"]:
+    test_data["Place_id"][0] = int(place_id)
+    # print(self.test_data.iloc[[0]])
+    data = data.append(test_data.iloc[[0]] , ignore_index=True)
+
+y_pred_test = gbm_Flag_weight.predict(data, num_iteration=gbm_Flag_weight.best_iteration)
+df = place_df[["place"]]
+df["price"] = y_pred_test
+print(df)
+
+import matplotlib.pyplot as plt
+fig = plt.figure()
+ax = fig.add_axes([0,0,1,1])
+langs = ['C', 'C++', 'Java', 'Python', 'PHP']
+students = [23,17,35,29,12]
+ax.bar(df["place"],df["price"])
+plt.show()
+
+
+
 

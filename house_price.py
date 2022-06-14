@@ -57,7 +57,7 @@ with other_col2:
      '市區',
     place_df['place']  )
     place_id = place_df[place_df['place'] == option].reset_index()['place_id'][0]
-
+    # print(option , place_id)
 
 
 
@@ -75,3 +75,5 @@ house_price = format(round(Total_price), ',d')
 
 st.markdown('### 房價 : {}'.format(house_price))
 
+# df = model.predict_by_column(place_df, **kwargs)
+# st.bar_chart(df["price"])
