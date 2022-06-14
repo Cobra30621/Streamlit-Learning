@@ -43,19 +43,19 @@ st.subheader("3.房子高度")
 
 build_col1, build_col2 = st.columns(2)
 with build_col1:
-    building_total_floors = st.number_input('建築物多高', step=1, value=1 )
+    building_total_floors = st.number_input('建築總高度', step=1, value=1 )
 with build_col2:
-    min_floors_height = st.number_input('建築物幾樓', step=1, value=1 )
+    min_floors_height = st.number_input('建築樓層', step=1, value=1 )
 
 
 st.subheader("4.其他")
 other_col1, other_col2 = st.columns(2)
 with other_col1:
-    house_age = st.number_input('屋齡')
+    house_age = st.number_input('屋齡', value=10)
 with other_col2:
     option = st.selectbox(
      '市區',
-    place_df['place']  )
+    place_df['place'] , index = 1)
     place_id = place_df[place_df['place'] == option].reset_index()['place_id'][0]
     # print(option , place_id)
 
@@ -73,7 +73,14 @@ kwargs = { "Transfer_Total_Ping" : Transfer_Total_Ping, "main_area": main_area,
 Total_price = model.predict(**kwargs)
 house_price = format(round(Total_price), ',d')
 
-st.markdown('### 房價 : {}'.format(house_price))
+unit_price = 0
+if(Transfer_Total_Ping != 0):
+    unit_price = format(round(Total_price / Transfer_Total_Ping), ',d')
+
+st.markdown('#### 房價 : {}'.format(house_price))
+st.markdown('#### 單位面積 : {}'.format(unit_price))
+st.info("計算方式: 總房價 / 轉移面積")
+
 
 # df = model.predict_by_column(place_df, **kwargs)
 # st.bar_chart(df["price"])
