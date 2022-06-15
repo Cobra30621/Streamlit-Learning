@@ -32,7 +32,7 @@ class ModelManager():
         
         return y_pred_test[0]
 
-    def predict_by_column(self,place_df, **kwargs):
+    def predict_by_place(self,place_df, **kwargs):
         for key, value in kwargs.items():
             
             self.test_data[key][0] = value

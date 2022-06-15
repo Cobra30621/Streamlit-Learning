@@ -59,6 +59,8 @@ with other_col2:
     place_id = place_df[place_df['place'] == option].reset_index()['place_id'][0]
     # print(option , place_id)
 
+submited = st.button('預測')
+
 
 
 st.header("二、房價預測")
@@ -77,10 +79,12 @@ unit_price = 0
 if(Transfer_Total_Ping != 0):
     unit_price = format(round(Total_price / Transfer_Total_Ping), ',d')
 
-st.markdown('#### 總房價 : {}'.format(house_price))
-st.markdown('#### 單價元平方公尺 : {}'.format(unit_price))
-st.info("計算方式: 總房價 / 轉移面積")
+if (submited):
+    st.markdown('#### 總房價 : {}'.format(house_price))
+    st.markdown('#### 單價元平方公尺 : {}'.format(unit_price))
+    st.info("計算方式: 總房價 / 轉移面積")
 
 
-# df = model.predict_by_column(place_df, **kwargs)
+# df = model.predict_by_place(place_df, **kwargs)
 # st.bar_chart(df["price"])
+
