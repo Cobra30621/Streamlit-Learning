@@ -14,7 +14,7 @@ class ModelManager():
         self.gbm_Flag_weight = self.loadModel()
         
 
-    # @st.cache
+    @st.cache
     def loadModel(self):
          return joblib.load('model/model.pkl')
 
