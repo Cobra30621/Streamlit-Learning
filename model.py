@@ -1,32 +1,29 @@
 import joblib
 import pandas as pd
 import numpy as np
+from sqlalchemy import false
 import streamlit as st
 
 class ModelManager():
-    
-
     def __init__(self):
-        self.test_data = pd.read_csv('test.csv', index_col=False)
-        # print(self.test_data)
-        # self.test_data = self.test_data.drop(['Unnamed: 0'],axis =1)[0]
         
-        self.gbm_Flag_weight = self.loadModel()
+        self.gbm_Flag_weight = self.loadModel('model/model.pkl')
+        self.test_data = pd.read_csv('csv/test.csv')
         
-
-    @st.cache
-    def loadModel(self):
-         return joblib.load('model/model.pkl')
+    @st.cache # 建立快取
+    def loadModel(self, model_path):
+        print("ModelManager load model:" + model_path)
+        return joblib.load(model_path)
 
 
     def predict(self, **kwargs):
         for key, value in kwargs.items():
             # print ("%s : %s" %(key, value))
             
-            self.test_data[key][0] = value
+            self.test_data.loc[0, key] = value
             # print (self.test_data[key][0])
 
-        print (self.test_data["Place_id"][0])
+        # print (self.test_data["Place_id"][0])
 
         y_pred_test = self.gbm_Flag_weight.predict(self.test_data, num_iteration=self.gbm_Flag_weight.best_iteration)
         
@@ -55,4 +52,22 @@ class ModelManager():
         return df
 
 
+# 將使用者輸入資料，轉成模型所需資料
+class DataPreprocessor():
+    def __init__(self):
 
+        self.place_df = self.load_csv('csv/place_id.csv')
+
+    @st.cache # 建立快取
+    def load_csv(self, file_path):
+        print("DataPreprocessor load csv:" + file_path)
+        return pd.read_csv(file_path)
+
+    def get_place_id(self, palce):
+        return self.place_df[self.place_df['place'] == palce].reset_index()['place_id'][0]
+
+    def get_economy_indicators(self, date):
+        print(date)
+
+    def get_place_list(self):
+        return self.place_df['place']

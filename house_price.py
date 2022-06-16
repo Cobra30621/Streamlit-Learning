@@ -2,14 +2,13 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import pydeck as pdk
-from model import ModelManager
-
+from model import DataPreprocessor, ModelManager
+import time
 
 
 # 事前讀取
-place_df = pd.read_csv('place_id.csv')
 model = ModelManager()
-
+dp = DataPreprocessor()
 
 st.title('台灣房價預測網站')
 
@@ -54,8 +53,8 @@ with st.form("imput_form"):
     with other_col2:
         option = st.selectbox(
         '市區',
-        place_df['place'] , index = 1)
-        place_id = place_df[place_df['place'] == option].reset_index()['place_id'][0]
+        dp.get_place_list(), index = 1)
+        place_id = dp.get_place_id(option)
         # print(option , place_id)
 
     # submited = st.button('預測')
@@ -72,6 +71,10 @@ kwargs = { "Transfer_Total_Ping" : Transfer_Total_Ping, "main_area": main_area,
 if (submited):
     Total_price = model.predict(**kwargs)
     house_price = format(round(Total_price), ',d')
+
+    # # 直後要加真的在跑
+    # with st.spinner('模型預測中'):
+    #     time.sleep(0.1)
 
     unit_price = 0
     if(Transfer_Total_Ping != 0):
