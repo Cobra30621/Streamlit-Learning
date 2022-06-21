@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 # from sqlalchemy import false
 import streamlit as st
+import geopandas as gpd
 
 class ModelManager():
     def __init__(self):
@@ -10,7 +11,7 @@ class ModelManager():
         self.gbm_Flag_weight = self.loadModel('model/model.pkl')
         self.test_data = pd.read_csv('csv/test.csv')
         
-    @st.cache # 建立快取
+    # @st.cache # 建立快取
     def loadModel(self, model_path):
         print("ModelManager load model:" + model_path)
         return joblib.load(model_path)
@@ -44,7 +45,7 @@ class ModelManager():
 
         y_pred_test = self.gbm_Flag_weight.predict(data, num_iteration=self.gbm_Flag_weight.best_iteration)
         print(y_pred_test)
-        df = place_df[["place"]]
+        df = place_df
         df["price"] = y_pred_test
         print(df)
 
@@ -57,8 +58,11 @@ class DataPreprocessor():
     def __init__(self):
 
         self.place_df = self.load_csv('csv/place_id.csv')
+        self.gdf = gpd.read_file('mapdata202203151020/TOWN_MOI_1100415.shp', encoding='utf-8')
+        self.gdf['place'] = self.gdf['COUNTYNAME'] + self.gdf['TOWNNAME']
+        self.gdf = pd.merge(self.gdf, self.place_df, on ="place")
 
-    @st.cache # 建立快取
+    # @st.cache # 建立快取
     def load_csv(self, file_path):
         print("DataPreprocessor load csv:" + file_path)
         return pd.read_csv(file_path)
@@ -66,8 +70,11 @@ class DataPreprocessor():
     def get_place_id(self, palce):
         return self.place_df[self.place_df['place'] == palce].reset_index()['place_id'][0]
 
-    def get_economy_indicators(self, date):
-        print(date)
-
     def get_place_list(self):
         return self.place_df['place']
+    
+    def get_gdf(self):
+        return self.gdf
+    
+    def get_economy_indicators(self, date):
+        print(date)

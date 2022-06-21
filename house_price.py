@@ -4,7 +4,39 @@ import numpy as np
 import pydeck as pdk
 from model import DataPreprocessor, ModelManager
 import time
+import geopandas as gpd
+import pandas as pd
 
+import geopandas
+
+# df = pd.DataFrame(
+#     {'City': ['Buenos Aires', 'Brasilia', 'Santiago', 'Bogota', 'Caracas'],
+#      'Country': ['Argentina', 'Brazil', 'Chile', 'Colombia', 'Venezuela'],
+#      'Latitude': [-34.58, -15.78, -33.45, 4.60, 10.48],
+#      'Longitude': [-58.66, -47.91, -70.66, -74.08, -66.86]})
+# gdf = geopandas.GeoDataFrame(
+#     df, geometry=geopandas.points_from_xy(df.Longitude, df.Latitude))
+# st.write(gdf.head())
+# world = geopandas.read_file(geopandas.datasets.get_path('naturalearth_lowres'))
+# ax = world[world.continent == 'South America'].plot(
+#     color='white', edgecolor='black')
+# gdf.plot(ax=ax, color='red')
+# st.pyplot()
+
+
+# town_shp = gpd.read_file('mapdata202203151020/TOWN_MOI_1100415.shp', encoding='utf-8')
+# print(town_shp['COUNTYNAME'] )
+# print(town_shp[town_shp['COUNTYNAME'] == '臺北市'])
+
+# ax = town_shp[town_shp['TOWNNAME'] != '旗津區'].plot(
+#     cmap='RdBu')
+# # st.set_option('deprecation.showPyplotGlobalUse', False)
+# st.pyplot()
+
+# print(town_shp.head())
+# map = town_shp.plot(cmap='RdBu')
+
+# st.write(map)
 
 # 事前讀取
 model = ModelManager()

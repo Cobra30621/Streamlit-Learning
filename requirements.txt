@@ -8,3 +8,4 @@ scikit-learn
 pydeck
 joblib
 lightgbm
+geopandas
