@@ -27,7 +27,7 @@ def app():
         st.header("一、請輸入房屋資料")
 
         area_col1, area_col2, area_col3, \
-        hrb_col1, hrb_col2, hrb_col3 = st.columns([2, 2, 2, 1, 1, 1])
+        hrb_col1, hrb_col2, hrb_col3 = st.columns([1, 1, 1, 1, 1, 1])
 
         with area_col1:
             Transfer_Total_Ping = st.number_input('轉移坪數', value=20.0 )
