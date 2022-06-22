@@ -10,3 +10,5 @@ joblib
 lightgbm
 geopandas
 leafmap
+leafmap.colormaps
+leafmap.common
