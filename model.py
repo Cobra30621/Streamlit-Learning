@@ -8,14 +8,20 @@ import json
 
 class ModelManager():
     def __init__(self):
-        self.gbm_Flag_weight = self.loadModel('model/model.pkl')
+        self.model_path = "model/" + "LGBM_0614"
+        self.gbm_Flag_weight = self.loadModel(self.model_path  + '/model.pkl')
 
-        f = open('json/default_LGBM.json')
+        f = open(self.model_path + '/default.json')
         data = json.load(f)
-        self.default_data = pd.DataFrame.from_dict(data)    
+        self.default_data = pd.DataFrame.from_dict(data)
 
-        # self.default_data = pd.read_csv('csv/test.csv')
-        # print(self.default_data.to_json(orient='index')) 
+        # self.create_json_file()
+    
+    def create_json_file(self):
+
+        self.default_data = pd.read_csv(self.model_path + '/test.csv')
+        print(self.default_data.to_json(orient='index')) 
+        # http://json.parser.online.fr/
         
     # @st.cache # 建立快取
     def loadModel(self, model_path):
@@ -61,20 +67,14 @@ class ModelManager():
 # 將使用者輸入資料，轉成模型所需資料
 class DataPreprocessor():
     def __init__(self):
-        self.place_df = self.load_csv('csv/place_id.csv')
-        self.gdf = gpd.read_file('mapdata202203151020/TOWN_MOI_1100415.shp', encoding='utf-8')
+        self.place_df = pd.read_csv('csv/place_id.csv')
+        self.gdf = gpd.read_file('taiwan_map/TOWN_MOI_1100415.shp', encoding='utf-8')
         self.gdf['place'] = self.gdf['COUNTYNAME'] + self.gdf['TOWNNAME']
         self.gdf = pd.merge(self.gdf, self.place_df, on ="place")
         self.city_list = ['臺北市', '新北市', '基隆市', '桃園市', '新竹縣', 
             '宜蘭縣', '苗栗縣', '臺中市', '彰化縣', '雲林縣', '嘉義縣', 
             '臺南市', '高雄市', '屏東縣', '臺東縣', '花蓮縣', '南投縣',    
             '澎湖縣', '連江縣', '金門縣' ]
-               
-
-    # @st.cache # 建立快取
-    def load_csv(self, file_path):
-        print("DataPreprocessor load csv:" + file_path)
-        return pd.read_csv(file_path)
 
     def get_place_id(self, city, district):
         return self.place_df[self.place_df['place'] == city + district]\
@@ -84,7 +84,6 @@ class DataPreprocessor():
         return self.place_df[self.place_df['place'] == palce].reset_index()['place_id'][0]
 
     def get_city_list(self):
-        # return self.gdf['COUNTYNAME'].unique()
         return self.city_list
 
     def get_district_list(self, city_list):
