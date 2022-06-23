@@ -42,11 +42,11 @@ import os
 import boto3
 
 
-adress = 'C:/Users/User/OneDrive - 銘傳大學 - Ming Chuan University/實價登陸/House_Project/'
+adress = ''
 sys.path.append(adress)
 from eval import simple_evaluate,evaluate_partitions,default_partitions
 
-TRAIN_DATA_PATH = adress + 'output_feature/clean_data_train.csv'
+TRAIN_DATA_PATH = adress + 'output_feature/clean_data_all_add_variable_train.csv'
 TEST_DATA_PATH = adress + 'output_feature/clean_data_test.csv'
 CODE_PATH = adress + 'code/MODEL/LGBM_Totalprice_martin.py'
 
@@ -118,6 +118,14 @@ if MLFLOW:
 
 raw_data = pd.read_csv(TRAIN_DATA_PATH ,dtype = 'str')
 raw_data_test = pd.read_csv(TEST_DATA_PATH ,dtype = 'str')
+
+
+
+place_id = raw_data['Place_id'].unique().astype(int)
+
+test = raw_data[raw_data['Place_id'] == '202'][['Place_id', 'address']]
+
+place_id_df = pd.DataFrame(place_id)
 
 
 def clean_data(raw_data):
